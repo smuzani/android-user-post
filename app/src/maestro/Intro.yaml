@@ -1,8 +1,45 @@
 appId: com.muz.userpost
 ---
 - launchApp
-- assertVisible: "Get Users"
-- tapOn: "Get Users"
+
+# Test second user
+- assertVisible: "User 2" # name
+- assertVisible: "Posts: 2" # post count
+# no need to test thumbnail or caret
+
+# Test clicking on a user
+- tapOn: "User 2"
+
+# User 2 - User Detail
+# no need to test image
+- assertVisible: "et ea vero quia laudantium autem" # title
+- assertVisible: "delectus reiciendis molestiae occaecati non minima eveniet qui voluptatibus\naccusamus in eum beatae sit" # body
+# only two posts, don't need to scroll down
+
+# Test back navigation
 - tapOn:
-    point: "25%,54%"
-- assertVisible: "User Profile"
+    id: "back_button"
+- assertVisible: "User 2"
+
+# Test last user
+- scrollUntilVisible:
+    element: "User 10"
+    direction: DOWN
+    timeout: 10000
+- assertVisible: "User 10" # name
+- assertVisible: "Posts: 3" # post count
+# no need to test thumbnail or caret
+
+# Test clicking on a user
+- tapOn: "User 10"
+
+# User 10 - User Detail
+# no need to test image
+- assertVisible: "sint soluta et vel magnam aut ut sed qui" # title
+- assertVisible: "repellat aut aperiam totam temporibus autem et\narchitecto magnam ut\ncons" # body
+- scrollUntilVisible:
+    element: "User 10"
+    direction: DOWN
+    timeout: 10000
+- assertVisible: "ratione ex tenetur perferendis" # title
+- assertVisible: "aut et excepturi dicta laudantium sint rerum nihil\nlaudantium" # body, there's a space here
