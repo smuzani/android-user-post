@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -50,7 +51,11 @@ fun UsersScreen(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun UserRow(modifier: Modifier, userPost: UserPost, onNavigateToDetails: (UserPost) -> Unit) {
-  Card(modifier = modifier, shape = RoundedCornerShape(12.dp)) {
+  Card(
+    modifier = modifier,
+    shape = RoundedCornerShape(12.dp),
+    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+  ) {
     Row(
       modifier = Modifier
         .fillMaxWidth()
@@ -77,13 +82,12 @@ fun UserRow(modifier: Modifier, userPost: UserPost, onNavigateToDetails: (UserPo
       ) {
         Text(
           text = userPost.user?.name ?: "",
-          style = MaterialTheme.typography.headlineLarge
+          style = MaterialTheme.typography.headlineMedium
         )
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
           text = "${userPost.postCount} posts",
-          style = MaterialTheme.typography.headlineSmall,
-          color = MaterialTheme.colorScheme.onSurfaceVariant
+          style = MaterialTheme.typography.titleLarge
         )
       }
 
