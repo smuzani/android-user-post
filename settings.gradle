@@ -9,4 +9,3 @@ rootProject.name = "UserPost"
 include ':app'
 include ':designSystem'
 include ':userpost'
-include ':spine'

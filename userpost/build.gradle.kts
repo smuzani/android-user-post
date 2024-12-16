@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-  namespace = "com.muz.userpost.randomuser"
+  namespace = "com.muz.userpost.userpost"
   compileSdk = 35
 
   defaultConfig {
@@ -42,7 +42,6 @@ android {
 
 dependencies {
   implementation(project(":designSystem"))
-  implementation(project(":spine"))
 
   // Jetpack Compose UI
   implementation(libs.compose.ui)
