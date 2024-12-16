@@ -14,14 +14,19 @@ appId: com.muz.userpost
 - tapOn: "User 2"
 
 # User 2 - User Detail
-# no need to test image
+- assertVisible:
+    id: "userImage"
 - assertVisible: "et ea vero quia laudantium autem" # title
 - assertVisible: "delectus reiciendis molestiae occaecati non minima eveniet qui voluptatibus\naccusamus in eum beatae sit" # body
-# only two posts, don't need to scroll down
+- assertVisible:
+    index: 1 # can't count so we check that second post exists
+    id: "postCard"
+- assertNotVisible:
+    index: 2 # can't count so we check that third post doesn't exist
+    id: "postCard"
 
 # Test back navigation
-- tapOn:
-    id: "back_button"
+- back
 - assertVisible: "User 2"
 
 # Test last user
@@ -45,4 +50,4 @@ appId: com.muz.userpost
     direction: DOWN
     timeout: 10000
 - assertVisible: "ratione ex tenetur perferendis" # title
-- assertVisible: "aut et excepturi dicta laudantium sint rerum nihil\nlaudantium" # body, there's a space here
+- assertVisible: "aut et excepturi dicta laudantium sint rerum nihil\nlaudantium " # body, there's a space here

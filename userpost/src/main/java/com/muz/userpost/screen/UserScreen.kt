@@ -7,24 +7,27 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.muz.spine.Nerve
+import com.muz.userpost.network.Post
 import com.muz.userpost.network.UserPost
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun UserScreen(
   nerve: Nerve,
@@ -36,66 +39,59 @@ fun UserScreen(
     nerve.setOnBottomBarButtonClicked { }
   }
 
-  Column(
+  LazyColumn(
     modifier = Modifier
       .fillMaxSize()
       .padding(nerve.currentScreenPadding)
-      .padding(16.dp),
-    horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    Text(
-      modifier = Modifier.fillMaxWidth(),
-      text = "User Profile",
-      style = MaterialTheme.typography.displayMedium,
-      textAlign = TextAlign.Center
-    )
-    Spacer(modifier = Modifier.height(16.dp))
-    HorizontalDivider()
-    Spacer(modifier = Modifier.height(24.dp))
+    // Header image
+    item {
+      Image(
+        painter = rememberAsyncImagePainter(userPost.user?.url),
+        contentDescription = null,
+        modifier = Modifier
+          .fillMaxWidth()
+          .height(240.dp)
+          .semantics { testTagsAsResourceId = true }
+          .testTag("userImage"),
+        contentScale = ContentScale.Crop
+      )
+      Spacer(modifier = Modifier.height(16.dp))
+    }
 
-    Image(
-      painter = rememberAsyncImagePainter(userPost.user?.url),
-      contentDescription = "User photo",
+    // Posts
+    items(userPost.posts ?: emptyList()) { post ->
+      PostCard(post)
+      Spacer(modifier = Modifier.height(8.dp))
+    }
+  }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun PostCard(post: Post) {
+  Card(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = 16.dp)
+      .semantics { testTagsAsResourceId = true }
+      .testTag("postCard"),
+    shape = RoundedCornerShape(8.dp)
+  ) {
+    Column(
       modifier = Modifier
-        .size(200.dp)
-        .clip(CircleShape)
-    )
-    Spacer(modifier = Modifier.height(24.dp))
-
-    Text(
-      modifier = Modifier.fillMaxWidth(),
-      text = userPost.user?.name ?: "",
-      style = MaterialTheme.typography.headlineLarge
-    )
-
-    Spacer(modifier = Modifier.height(16.dp))
-    HorizontalDivider()
-    Spacer(modifier = Modifier.height(16.dp))
-
-    Text(
-      text = "Posts (${userPost.postCount})",
-      style = MaterialTheme.typography.headlineMedium
-    )
-
-    LazyColumn {
-      items(userPost.posts ?: emptyList()) { post ->
-        Column(
-          modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-        ) {
-          Text(
-            text = post.title ?: "",
-            style = MaterialTheme.typography.titleLarge
-          )
-          Spacer(modifier = Modifier.height(4.dp))
-          Text(
-            text = post.body ?: "",
-            style = MaterialTheme.typography.bodyMedium
-          )
-          HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
-        }
-      }
+        .fillMaxWidth()
+        .padding(16.dp)
+    ) {
+      Text(
+        text = post.title ?: "",
+        style = MaterialTheme.typography.titleLarge,
+      )
+      Spacer(modifier = Modifier.height(8.dp))
+      Text(
+        text = post.body ?: "",
+        style = MaterialTheme.typography.bodyLarge,
+      )
     }
   }
 }
