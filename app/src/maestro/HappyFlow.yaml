@@ -4,8 +4,11 @@ appId: com.muz.userpost
 
 # Test second user
 - assertVisible: "User 2" # name
-- assertVisible: "Posts: 2" # post count
-# no need to test thumbnail or caret
+- assertVisible: "2 posts" # post count
+- assertVisible:
+    id: "thumbnail"
+- assertVisible:
+    id: "caret"
 
 # Test clicking on a user
 - tapOn: "User 2"
@@ -27,7 +30,7 @@ appId: com.muz.userpost
     direction: DOWN
     timeout: 10000
 - assertVisible: "User 10" # name
-- assertVisible: "Posts: 3" # post count
+- assertVisible: "3 posts" # post count
 # no need to test thumbnail or caret
 
 # Test clicking on a user
