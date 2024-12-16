@@ -1,16 +1,26 @@
 package com.muz.userpost.network
 
+import com.muz.userpost.database.UserPostDao
+import com.muz.userpost.database.toEntity
+import com.muz.userpost.database.toUserPost
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 interface UserPostRepository {
   fun getUserPosts(): Flow<List<UserPost>>
+  suspend fun refreshUserPosts()
 }
 
 class UserPostRepositoryImpl(
-  private val service: UserPostService
+  private val service: UserPostService,
+  private val dao: UserPostDao
 ) : UserPostRepository {
-  override fun getUserPosts(): Flow<List<UserPost>> = flow {
+  override fun getUserPosts(): Flow<List<UserPost>> =
+    dao.getAllUserPosts().map { entities ->
+      entities.map { it.toUserPost() }
+    }
+
+  override suspend fun refreshUserPosts() {
     try {
       // Fetch both users and posts
       val users = service.getUsers()
@@ -25,10 +35,13 @@ class UserPostRepositoryImpl(
           }
         )
       }
-      emit(userPosts)
+
+      // Save to database
+      dao.clearUserPosts()
+      dao.insertUserPosts(userPosts.map { it.toEntity() })
     } catch (e: Exception) {
       // Handle error case
-      emit(emptyList())
+      throw e
     }
   }
 }
