@@ -1,4 +1,4 @@
-appId: com.minimalist.template
+appId: com.muz.userpost
 ---
 - launchApp
 - assertVisible: "Get Users"

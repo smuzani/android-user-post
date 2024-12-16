@@ -10,7 +10,7 @@ android {
   compileSdk = 35
 
   defaultConfig {
-    applicationId = "com.minimalist.template"
+    applicationId = "com.muz.userpost"
     minSdk = 26
     targetSdk = 35
     versionCode = 1
@@ -43,14 +43,15 @@ android {
       excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
   }
-  namespace = "com.template"
+  namespace = "com.muz"
 }
 
 dependencies {
   // Project dependencies
   // These are modules that the project depends on.
-  implementation(project(":designSystem")) // UI, color, themes, shared across modules
-  implementation(project(":randomuser")) // Sample module for randomuser.me API
+  implementation(project(":designSystem"))
+  implementation(project(":userpost")) // UI, color, themes, shared across modules
+  // Sample module for randomuser.me API
   implementation(project(":spine")) // Communication between screens and modules
 
   implementation(libs.core.ktx)

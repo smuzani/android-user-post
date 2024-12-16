@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-  namespace = "com.template.spine"
+  namespace = "com.muz.spine"
   compileSdk = 35
 
   defaultConfig {

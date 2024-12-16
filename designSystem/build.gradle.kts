@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-  namespace = "com.minimalist.template.designSystem"
+  namespace = "com.muz.userpost.designSystem"
   compileSdk = 35
 
   defaultConfig {

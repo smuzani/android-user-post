@@ -5,8 +5,6 @@ A minimalist template with networking, Compose, and Flow.
 
 Thanks to [https://randomuser.me/](https://randomuser.me) for the free sample API.
 
-Reminder: Rename `Template` and the package name to your app name.
-
 ## Stack
 
 **Network:** Retrofit (API), Coil (images)
