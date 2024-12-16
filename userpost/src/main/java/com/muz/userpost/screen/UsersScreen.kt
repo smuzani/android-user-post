@@ -20,30 +20,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.muz.userpost.network.RandomUser
 import com.muz.spine.Nerve
+import com.muz.userpost.network.UserPost
 
 @Composable
 fun UsersScreen(
   nerve: Nerve,
-  onNavigateToDetails: (RandomUser) -> Unit,
+  onNavigateToDetails: (UserPost) -> Unit,
   vm: UserViewModel
 ) {
-  val usersState by vm.users.collectAsState(null)
-  val users = remember(usersState) {
-    usersState ?: emptyList()
-  }
-  // Setting the title in LaunchedEffect will only happen once when they enter the screen
+  val userPostsState by vm.userPosts.collectAsState()
+
   LaunchedEffect(Unit) {
     nerve.setTitle("Users")
-    nerve.setBottomBarButtonText("Get Users")
-    nerve.setOnBottomBarButtonClicked { vm.refreshUsers() }
+    nerve.setBottomBarButtonText("Refresh")
+    nerve.setOnBottomBarButtonClicked { vm.loadUserPosts() }
   }
 
   Column(
@@ -53,14 +49,14 @@ fun UsersScreen(
       .padding(16.dp),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    if (usersState == null) {
+    if (userPostsState.isEmpty()) {
       Text("Loading…", style = MaterialTheme.typography.displayLarge)
     } else {
       LazyColumn(
         modifier = Modifier.padding(4.dp)
       ) {
-        items(users, key = { user -> user.id.value }) { user ->
-          UserRow(user, onNavigateToDetails)
+        items(userPostsState, key = { userPost -> userPost.user?.name ?: "" }) { userPost ->
+          UserRow(userPost, onNavigateToDetails)
           HorizontalDivider()
         }
       }
@@ -68,27 +64,35 @@ fun UsersScreen(
   }
 }
 
-@Composable fun UserRow(user: RandomUser, onNavigateToDetails: (RandomUser) -> Unit) {
+@Composable
+fun UserRow(userPost: UserPost, onNavigateToDetails: (UserPost) -> Unit) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
       .padding(vertical = 12.dp)
       .clickable {
-        onNavigateToDetails(user)
-      }, verticalAlignment = Alignment.CenterVertically
+        onNavigateToDetails(userPost)
+      },
+    verticalAlignment = Alignment.CenterVertically
   ) {
     Image(
-      painter = rememberAsyncImagePainter(user.picture.thumbnail),
+      painter = rememberAsyncImagePainter(userPost.user?.thumbnailUrl),
       contentDescription = "User photo",
       modifier = Modifier
         .size(64.dp)
         .clip(CircleShape)
     )
     Spacer(modifier = Modifier.width(25.dp))
-    Text(
-      text = "${user.name.first} ${user.name.last}",
-      style = MaterialTheme.typography.headlineLarge
-    )
+    Column {
+      Text(
+        text = userPost.user?.name ?: "",
+        style = MaterialTheme.typography.headlineLarge
+      )
+      Text(
+        text = "Posts: ${userPost.postCount}",
+        style = MaterialTheme.typography.bodyMedium
+      )
+    }
   }
 }
 

@@ -3,9 +3,9 @@ package com.muz.userpost.screen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.muz.userpost.network.RandomUser
-import com.muz.userpost.network.RandomUserRepositoryImpl
 import com.muz.userpost.network.RetrofitBuilder
+import com.muz.userpost.network.UserPost
+import com.muz.userpost.network.UserPostRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,22 +17,25 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor() : ViewModel() {
-  private val randomUserService = RandomUserRepositoryImpl(RetrofitBuilder.randomUserService)
+  private val userPostRepository = UserPostRepositoryImpl(RetrofitBuilder.userPostService)
 
   init {
-    refreshUsers()
+    loadUserPosts()
   }
 
-  private val _users: MutableStateFlow<List<RandomUser>?> = MutableStateFlow(null)
-  val users: StateFlow<List<RandomUser>?> = _users
+  private val _userPosts = MutableStateFlow<List<UserPost>>(emptyList())
+  val userPosts: StateFlow<List<UserPost>> = _userPosts
 
-  fun refreshUsers() {
+  fun loadUserPosts() {
     viewModelScope.launch {
-      randomUserService.get50RandomUsers()
+      userPostRepository.getUserPosts()
         .flowOn(Dispatchers.IO)
-        .catch { e -> Log.e("UserViewModel", "Error: $e") }
-        .collect { users ->
-          _users.value = users
+        .catch { e ->
+          Log.e("UserViewModel", "Error loading user posts: $e")
+          _userPosts.value = emptyList()
+        }
+        .collect { posts ->
+          _userPosts.value = posts
         }
     }
   }

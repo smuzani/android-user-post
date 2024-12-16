@@ -77,4 +77,6 @@ dependencies {
   androidTestImplementation(libs.espresso.core)
 
   debugImplementation(libs.compose.ui.tooling)
+
+  implementation(libs.icons.extended)
 }
