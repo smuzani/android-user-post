@@ -1,21 +1,15 @@
 # Android Minimalist Template
-A minimalist template with networking, Compose, and Flow.
-
-![Architecture Image](architecture.png)
-
-Thanks to [https://randomuser.me/](https://randomuser.me) for the free sample API.
+A minimalist template with networking, Compose, and Room database.
 
 ## Stack
 
 **Network:** Retrofit (API), Coil (images)
 
-**UI:** Jetpack Compose (where stuff is), Material 3 (design/color)
+**UI:** Jetpack Compose, Material 3
 
-**Logic:** Kotlin Flow (Reactive programming), Hilt (DI)
+**Data:** Room (local database), Kotlin Flow (reactive), Hilt (DI)
 
-**Tests**: JUnit (unit). UI tests can be done on [Maestro](https://maestro.mobile.dev/). One example is given in [Intro.yaml](https://github.com/smuzani/android-minimalist-template/blob/main/app/src/maestro/Intro.yaml). 
-
-****
+**Tests**: UI tests with [Maestro](https://maestro.mobile.dev/). See [HappyFlow.yaml](app/src/maestro/HappyFlow.yaml).
 
 ## Philosophy
 
@@ -33,4 +27,4 @@ Related to the peripheral vision, you should be able to paste a file and related
 
 ### Minimalist
 
-Everything in the stack should improve peripheral vision. I debated for a while whether to add DI even though it's omnipresent in Android architectures. Material3 went in and out of the design. Ask yourself whether anything new improves or takes away from it.
+Everything in the stack should improve peripheral vision. Each addition should be questioned on whether it improves or takes away from the codebase's clarity and maintainability.
